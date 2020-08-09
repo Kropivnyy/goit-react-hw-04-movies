@@ -11,7 +11,27 @@ const fetchTrendingMovies = () => {
 };
 
 const fetchMovieById = id => {
-  return axios.get(`movie/${id}`).then(response => console.log(response));
+  return axios.get(`movie/${id}`).then(response => response.data);
 };
 
-export default { fetchTrendingMovies, fetchMovieById };
+const fetchMovieCast = id => {
+  return axios.get(`movie/${id}/credits`).then(response => response.data.cast);
+};
+
+const fetchMovieReview = id => {
+  return axios.get(`movie/${id}/reviews`).then(response => response.data);
+};
+
+const searchMovie = query => {
+  return axios
+    .get(`search/movie?query=${query}`)
+    .then(response => response.data);
+};
+
+export default {
+  fetchTrendingMovies,
+  fetchMovieById,
+  searchMovie,
+  fetchMovieCast,
+  fetchMovieReview,
+};
