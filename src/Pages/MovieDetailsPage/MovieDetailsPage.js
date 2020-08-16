@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
-import { NavLink, Route } from 'react-router-dom';
-import MovieCast from '../../components/MovieCast';
-import MovieReviews from '../../components/MovieReviews';
+import MovieDetails from '../../components/MovieDetails';
+import NavAdditionalInfo from '../../components/NavAdditionalInfo';
+import AdditionalInfo from '../../components/AdditionalInfo';
+import ButtonGoBack from '../../components/ButtonGoBack';
+import Loader from 'react-loader-spinner';
+import ApiError from '../../components/ApiError';
 import apiServices from '../../Services/apiServices';
 
 class MovieDetailsPage extends Component {
   state = {
-    release_date: null,
-    genres: null,
-    poster_path: null,
-    title: null,
-    vote_average: null,
-    overview: null,
-    releaseYear: null,
-    mappedGenres: null,
-    poster: null,
+    release_date: '',
+    genres: '',
+    poster_path: '',
+    title: '',
+    vote_average: '',
+    overview: '',
+    releaseYear: '',
+    mappedGenres: '',
+    poster: '',
+    isLoading: false,
+    error: null,
   };
 
   componentDidMount() {
+    const { match } = this.props;
+    this.setState({ isLoading: true });
+
     apiServices
-      .fetchMovieById(this.props.match.params.movieId)
+      .fetchMovieById(match.params.movieId)
       .then(
         ({
           release_date,
@@ -36,9 +44,12 @@ class MovieDetailsPage extends Component {
             title,
             vote_average,
             overview,
+            error: null,
           });
         },
-      );
+      )
+      .catch(error => this.setState({ error: error.toString() }))
+      .finally(() => this.setState({ isLoading: false }));
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -49,7 +60,11 @@ class MovieDetailsPage extends Component {
 
     if (genres && prevState.genres !== genres) {
       this.setState({
-        mappedGenres: genres.map(genre => `${genre.name} `),
+        mappedGenres: genres.map((genre, index, array) => {
+          if (index === array.length - 1) return genre.name;
+
+          return `${genre.name}, `;
+        }),
       });
     }
 
@@ -63,55 +78,52 @@ class MovieDetailsPage extends Component {
   render() {
     const {
       poster,
+      poster_path,
       title,
       vote_average,
       overview,
       releaseYear,
       mappedGenres,
+      isLoading,
+      error,
     } = this.state;
+
+    const { location, history } = this.props;
+
+    const shouldRenderFallback = title.length <= 0 && !error && !isLoading;
 
     return (
       <>
-        <div>
-          <ul>
-            <li>
-              <NavLink
-                to={`${this.props.match.url}/cast`}
-                className="nav-link"
-                activeClassName="nav-link--active"
-              >
-                Cast
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to={`${this.props.match.url}/reviews`}
-                className="nav-link"
-                activeClassName="nav-link--active"
-              >
-                Reviews
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <Route path={`${this.props.match.path}/cast`} component={MovieCast} />
-          <Route
-            path={`${this.props.match.path}/reviews`}
-            component={MovieReviews}
+        <div className="LoaderWrapper">
+          <Loader
+            visible={isLoading}
+            type="BallTriangle"
+            color="#f5001d"
+            height={80}
+            width={80}
           />
         </div>
-        <div>
-          <img src={poster} alt={title}></img>
-          <h2>
-            {title} ({releaseYear})
-          </h2>
-          <p>User Score: {vote_average * 10}%</p>
-          <h3>Overview</h3>
-          <p>{overview}</p>
-          <h4>Genres</h4>
-          <p>{mappedGenres}</p>
-        </div>
+        {title.length > 0 && (
+          <>
+            <MovieDetails
+              poster_path={poster_path}
+              poster={poster}
+              title={title}
+              releaseYear={releaseYear}
+              vote_average={vote_average}
+              overview={overview}
+              mappedGenres={mappedGenres}
+            >
+              <ButtonGoBack location={location} history={history} />
+            </MovieDetails>
+            <NavAdditionalInfo />
+            <AdditionalInfo />
+          </>
+        )}
+        {shouldRenderFallback && (
+          <p>We don't have information about this movie.</p>
+        )}
+        {error && <ApiError error={error} />}
       </>
     );
   }

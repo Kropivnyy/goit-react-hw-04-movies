@@ -1,0 +1,25 @@
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  color: #333;
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.LoaderWrapper {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ContainerInner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}

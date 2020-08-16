@@ -19,19 +19,21 @@ const fetchMovieCast = id => {
 };
 
 const fetchMovieReview = id => {
-  return axios.get(`movie/${id}/reviews`).then(response => response.data);
+  return axios
+    .get(`movie/${id}/reviews`)
+    .then(response => response.data.results);
 };
 
-const searchMovie = query => {
+const searchMovies = query => {
   return axios
-    .get(`search/movie?query=${query}`)
-    .then(response => response.data);
+    .get(`search/movie${query}`)
+    .then(response => response.data.results);
 };
 
 export default {
   fetchTrendingMovies,
   fetchMovieById,
-  searchMovie,
+  searchMovies,
   fetchMovieCast,
   fetchMovieReview,
 };

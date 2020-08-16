@@ -1,0 +1,14 @@
+.MovieDetails {
+  display: flex;
+}
+
+.Image {
+  height: 450px;
+  margin-right: 20px;
+}
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

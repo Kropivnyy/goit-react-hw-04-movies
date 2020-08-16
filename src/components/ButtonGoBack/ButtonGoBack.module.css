@@ -1,0 +1,22 @@
+.ButtonGoBack {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 4px 16px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  background-color: #e21a31;
+  border: 1px solid #e21a31;
+  line-height: 1.5;
+  border-radius: 4px;
+  color: #fff;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.ButtonGoBack:hover,
+.ButtonGoBack:focus {
+  background-color: #f5001d;
+  border-color: #f5001d;
+  cursor: pointer;
+}

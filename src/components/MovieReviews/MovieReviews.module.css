@@ -1,0 +1,25 @@
+.MovieReviews {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.List {
+  margin: 0;
+  padding-right: 20px;
+  padding-left: 20px;
+  line-height: 1.5;
+}
+
+.Item:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.Author {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.Content {
+  margin: 0;
+  text-indent: 20px;
+}

@@ -1,0 +1,38 @@
+.MovieList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  grid-gap: 40px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.Link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.Image {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.Item:hover .Image {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.Title {
+  margin-bottom: 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.Item:hover .Title {
+  color: #f5001dcc;
+}

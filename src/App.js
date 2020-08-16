@@ -1,48 +1,39 @@
-import React, { Component } from 'react';
-import { Route, Switch, NavLink } from 'react-router-dom';
-import HomePage from './Pages/HomePage';
-import MoviesPage from './Pages/MoviesPage';
-import MovieDetailsPage from './Pages/MovieDetailsPage';
+import React, { Suspense, lazy } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import AppBar from './components/AppBar';
+import Loader from 'react-loader-spinner';
+import routes from './Pages/routes';
 
-class App extends Component {
-  render() {
-    return (
-      <>
-        <header>
-          <nav>
-            <ul>
-              <li>
-                <NavLink
-                  exact
-                  to="/"
-                  className="nav-link"
-                  activeClassName="nav-link--active"
-                >
-                  Home
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/movies"
-                  className="nav-link"
-                  activeClassName="nav-link--active"
-                >
-                  Movies
-                </NavLink>
-              </li>
-            </ul>
-          </nav>
-        </header>
-        <main>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/movies/:movieId" component={MovieDetailsPage} />
-            <Route path="/movies" component={MoviesPage} />
-          </Switch>
-        </main>
-      </>
-    );
-  }
-}
+const HomePage = lazy(() =>
+  import('./Pages/HomePage' /* webpackChunkName: "home-page" */),
+);
+const MovieDetailsPage = lazy(() =>
+  import(
+    './Pages/MovieDetailsPage' /* webpackChunkName: "movie-details-page" */
+  ),
+);
+const MoviesPage = lazy(() =>
+  import('./Pages/MoviesPage' /* webpackChunkName: "movies-page" */),
+);
+
+const App = () => (
+  <>
+    <AppBar />
+    <Suspense
+      fallback={
+        <div className="LoaderWrapper">
+          <Loader type="BallTriangle" color="#f5001d" height={80} width={80} />
+        </div>
+      }
+    >
+      <Switch>
+        <Route exact path={routes.home} component={HomePage} />
+        <Route path={routes.movieDetails} component={MovieDetailsPage} />
+        <Route path={routes.movies} component={MoviesPage} />
+        <Redirect to={routes.home} />
+      </Switch>
+    </Suspense>
+  </>
+);
 
 export default App;
